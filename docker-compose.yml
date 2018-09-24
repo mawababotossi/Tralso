@@ -1,0 +1,44 @@
+version: '2'
+services:
+  web:
+    image: odoo:10.0
+    depends_on:
+      - db
+    ports:
+      - "0.0.0.0:8069:8069"
+    volumes:
+      - sotral-web-data:/var/lib/odoo:rw
+#      - ./odoo/config:/etc/odoo #This can cause problems with addons path
+      - ./odoo/addons:/mnt/extra-addons
+    networks:
+      - sotral-network
+
+  db:
+    image: postgres:9.4
+    environment:
+      - POSTGRES_PASSWORD=odoo
+      - POSTGRES_USER=odoo
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - sotral-db-data:/var/lib/postgresql/data/pgdata
+    networks:
+      - sotral-network
+
+  api:
+    build: ./api
+    # command: npm run start:dev
+    volumes:
+      - './api:/srv/api'
+      - '/srv/api/node_modules'
+    ports:
+      - '3000:3000' # Expose ports without publishing them to the host machine
+    networks:
+      - sotral-network
+
+volumes:
+  sotral-web-data:
+  sotral-db-data:
+
+networks:
+  sotral-network:
+    driver: bridge

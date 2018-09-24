@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="view_card_topup_tree" model="ir.ui.view">
+            <field name="name">card.topup.tree</field>
+            <field name="model">card.topup</field>
+            <field name="priority" eval="8" />
+            <field name="arch" type="xml">
+                <tree string="CardTopup">
+                    <field name="card" />
+                    <field name="date" />
+                    <field name="amount" />
+                    <field name="operator" />
+                    <field name="handled" />
+                </tree>
+            </field>
+        </record>
+        
+        <record model="ir.actions.act_window" id="action_view_card_topup">
+            <field name="name">Liste des recharges</field>
+            <field name="res_model">card.topup</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+           
+        </record>
+ 
+        <menuitem id="delux_card_topup" name="Recharges" parent="menu_card"
+                  action="action_view_card_topup"/>
+    </data>
+</odoo>
