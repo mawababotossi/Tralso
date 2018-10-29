@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="view_card_transactions_tree" model="ir.ui.view">
+            <field name="name">card.transactions.tree</field>
+            <field name="model">card.transactions</field>
+            <field name="priority" eval="8" />
+            <field name="arch" type="xml">
+                <tree string="Card transactions">
+                    <field name="date" />
+                    <field name="card" />
+                    <field name="amount" />
+                    <field name="type" />
+                    <field name="telco" />
+                    <field name="service" />
+                    <field name="bus_line" />
+                    <field name="bus" />
+                    <field name="driver" />
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_view_card_transactions">
+            <field name="name">Transactions</field>
+            <field name="res_model">card.transactions</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+
+        </record>
+
+        <record id="view_card_tree" model="ir.ui.view">
+            <field name="name">card.card.tree</field>
+            <field name="model">card.card</field>
+            <field name="priority" eval="8" />
+            <field name="arch" type="xml">
+                <tree string="Card">
+                    <field name="code" />
+                    <field name="name" />
+                    <field name="type" />
+                    <field name="owner_id" />
+                    <field name="issue_date" />
+                    <field name="expiry_date" />
+                    <field name="value" />
+                    <field name="status" />
+                </tree>
+            </field>
+        </record>
+        <record id="view_card_form" model="ir.ui.view">
+            <field name="name">card.card.form</field>
+            <field name="model">card.card</field>
+            <field name="priority" eval="8" />
+            <field name="arch" type="xml">
+                <form string="Card">
+                    <sheet>
+                       <div class="oe_title">
+                            <h1>
+                                <table>
+                                    <tr>
+                                        <td style="padding-right:10px;"><field name="code" required="1" placeholder="Code" /></td>
+                                        <td style="padding-right:10px;"><field name="type" placeholder="Card Type" required="1"/></td>
+                                        <td style="padding-right:10px;"><field name="value" placeholder="Value" required="1"/></td>
+                                    </tr>
+                                </table>
+                            </h1>
+                        </div>
+                        <notebook colspan="4">
+                            <page name="Card details"
+                                string="Détails de la carte">
+                                <group col="4" colspan="4"
+                                    name="card_detail">
+                                    <field name="issue_date" />
+                                    <field name="expiry_date" />
+                                    <field name="owner_id" disabled="disabled"/>
+                                    <field name="status" />
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="action_view_cards">
+            <field name="name">Liste des cartes prépayées</field>
+            <field name="res_model">card.card</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create new card
+                </p>
+            </field>
+        </record>
+        <menuitem id="sotral_card" name="Cartes prépayées" parent="strl_transport_payment"
+                  action="action_view_cards"/>
+
+        <menuitem id="strl_card_transactions" name="Transactions" parent="strl_transport_payment"
+                  action="action_view_card_transactions"/>
+    </data>
+</odoo>

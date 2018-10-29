@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="strl_bus_line_view_form" model="ir.ui.view">
+            <field name="name">strl.busline.form</field>
+            <field name="model">strl.busline</field>
+            <field name="priority" eval="8" />
+            <field name="arch" type="xml">
+                <form string="Bus line">
+                    <sheet>
+                       <div class="oe_title">
+                            <h1>
+                                <table>
+                                    <tr>
+                                        <td style="padding-right:10px;"><field name="name" required="1" placeholder="Nom" /></td>
+                                    </tr>
+                                </table>
+                            </h1>
+                        </div>
+                        <div class="">
+                           <table width="100%">
+                               <tr>
+                                   <td style="padding-right:10px;"><field name="bus_stops"/></td>
+                               </tr>
+                           </table>
+                         </div>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="strl_bus_line_view_tree" model="ir.ui.view">
+            <field name="name">strl.busline.tree</field>
+            <field name="model">strl.busline</field>
+            <field name="priority" eval="8" />
+            <field name="arch" type="xml">
+                <tree string="Bus lines">
+                    <field name="name" />
+                    <field name="vehicles" />
+                    <field name="bus_stops" invisible="1"/>
+                    <field name="bus_stops_count" />
+                </tree>
+            </field>
+        </record>
+
+        <record id='strl_bus_line_view_kanban' model='ir.ui.view'>
+           <field name="name">strl.bus.line.kanban</field>
+           <field name="model">strl.busline</field>
+           <field name="arch" type="xml">
+               <kanban>
+                   <field name="name" />
+                   <field name="bus_stops" />
+                   <field name="bus_stops_count" />
+
+                   <templates>
+                       <t t-name="kanban-box">
+                           <div class="oe_kanban_global_click">
+                               <div class="o_kanban_tags_section">
+                                   <!--field name="tag_ids"/-->
+                               </div>
+
+                               <div class="oe_kanban_details">
+                                   <strong>
+                                       <field name="name"/>
+                                   </strong>
+                                   <ul>
+                                       <li>
+                                           <field name="bus_stops_count"/> stop(s)
+                                       </li>
+                                       <li>
+                                           <field name="vehicles"/>
+                                       </li>
+                                   </ul>
+
+                                   <div class="o_kanban_button">
+
+                                   </div>
+                               </div>
+                           </div>
+                       </t>
+                   </templates>
+               </kanban>
+           </field>
+       </record>
+
+        <record model="ir.actions.act_window" id="action_view_bus_lines">
+            <field name="name">Lignes de bus</field>
+            <field name="res_model">strl.busline</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="domain">[]</field>
+        </record>
+
+        <record id="strl_bus_stop_view_tree" model="ir.ui.view">
+            <field name="name">strl.busstop.tree</field>
+            <field name="model">strl.busstop</field>
+            <field name="priority" eval="8" />
+            <field name="arch" type="xml">
+                <tree string="Stops">
+                    <field name="name" />
+                    <field name="longitude" />
+                    <field name="latitude" />
+                </tree>
+            </field>
+        </record>
+        <record id="strl_bus_view_form" model="ir.ui.view">
+            <field name="name">strl.busstop.form</field>
+            <field name="model">strl.busstop</field>
+            <field name="priority" eval="8" />
+            <field name="arch" type="xml">
+                <form string="Bus stop">
+                    <sheet>
+                       <div class="oe_title">
+                            <h1>
+                                <table>
+                                    <tr>
+                                        <td style="padding-right:10px;"><field name="name" required="1" placeholder="Name" /></td>
+                                        <td style="padding-right:10px;"><field name="longitude" placeholder="logitude" required="1"/></td>
+                                        <td style="padding-right:10px;"><field name="latitude" placeholder="latitude" required="1"/></td>
+                                    </tr>
+                                </table>
+                            </h1>
+                        </div>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="action_view_bus_stops">
+            <field name="name">Bus stops</field>
+            <field name="res_model">strl.busstop</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Add new bus stop
+                </p>
+            </field>
+        </record>
+
+        <record id="strl_bus_boardings_view_tree" model="ir.ui.view">
+            <field name="name">strl.busboardings.tree</field>
+            <field name="model">strl.busboardings</field>
+            <field name="priority" eval="8" />
+            <field name="arch" type="xml">
+                <tree string="Stops">
+                    <field name="datetime" />
+                    <field name="bus_line" />
+                    <field name="bus_stop" />
+                    <field name="boarded" />
+                    <field name="alighting" />
+                </tree>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="action_view_bus_boardings">
+            <field name="name">Bus boardings</field>
+            <field name="res_model">strl.busboardings</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+                <p class=""></p>
+            </field>
+        </record>
+
+        <menuitem id="strl_bus_lines" name="Lignes de bus" parent="strl_transport_activities"
+                  action="action_view_bus_lines"/>
+                  
+        <menuitem id="strl_bus_stops" name="Arrêts de bus" parent="strl_transport_activities"
+                  action="action_view_bus_stops"/>
+
+        <menuitem id="strl_bus_boardings" name="Bus boardings" parent="strl_transport_activities"
+                  action="action_view_bus_boardings"/>
+    </data>
+</odoo>

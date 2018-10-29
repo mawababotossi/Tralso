@@ -1,0 +1,49 @@
+<?xml version = "1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Inherited employee form view -->
+    <record id="view_employee_form_inherit_strl" model="ir.ui.view">
+        <field name="name">view.employee.form.inherit.strl</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <notebook position="inside">
+                <page string="Agent Sotral">
+                    <group>
+                        <field name="agent"/>
+                        <field name="agent_type" attrs="{'invisible': [('agent','=', False)]}"/>
+                        <!--field name="outsourcing" attrs="{'invisible': [('agent_type','!=', 'driver')]}"/-->
+                    </group>
+		                <group col="4">
+                        <label for="driver_license" attrs="{'invisible': [('agent_type','!=', 'driver')]}"/>
+                        <div>
+                            <field name="driver_license" attrs="{'invisible': [('agent_type','!=', 'driver')]}"/>
+                            <!--button name="get_driver_license_info" type="object" string="Get Licence Info" attrs="{'invisible': [('driver','=',False)]}" class="oe_link"/-->
+                        </div>
+                        <field name="license_type" attrs="{'invisible': [('agent_type','!=', 'driver')]}"/>
+                        <field name="license_valid_from" attrs="{'invisible': [('agent_type','!=', 'driver')]}"/>
+                        <field name="license_expiration" attrs="{'invisible': [('agent_type','!=', 'driver')]}"/>
+                        <field name="days_to_expire" attrs="{'invisible': [('agent_type','!=', 'driver')]}"/>
+                    </group>
+                </page>
+            </notebook>
+        </field>
+    </record>
+    <record id="strl_open_view_employee_list" model="ir.actions.act_window">
+        <field name="name">Agents</field>
+        <field name="res_model">hr.employee</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="domain">[('agent','=',True)]</field>
+        <field name="context">{}</field>
+        <field eval="False" name="view_id"/>
+        <field name="search_view_id" ref="hr.view_employee_filter"/>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">Click to add a new agent.</p>
+            <p>With just a quick glance on Odoo driver screen, you
+            can easily find all the information you need for each person;
+            contact data, job position, availability, etc.
+          </p>
+        </field>
+    </record>
+    <!--menuitem action="strl_open_view_employee_list" id="menu_strl_open_view_employee_list" name="Agents" parent="strl_agents_management" sequence="3"/-->
+</odoo>

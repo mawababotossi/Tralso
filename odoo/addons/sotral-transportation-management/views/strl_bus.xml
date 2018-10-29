@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!--record id="fleet_vehicle_search_inherit_strl" model="ir.ui.view">
+        <field name="name">fleet.vehicle.strl.search</field>
+        <field name="model">fleet.vehicle</field>
+        <field name="inherit_id" ref="fleet.fleet_vehicle_view_search"/>
+        <field name="arch" type="xml">
+            <search string="All vehicles">
+                <field filter_domain="['|', ('name','ilike',self), ('license_plate','ilike',self)]" name="name" string="Vehicle"/>
+                <field name="year_model"/>
+                <field name="serial_number"/>
+                <field name="registration"/>
+                <group expand="1" string="Group By">
+                    <filter context="{'group_by' : 'year_model'}" name="groupby_year_model" string="Year Model"/>
+                    <filter context="{'group_by' : 'registration'}" name="groupby_registration" string="Registration"/>
+                    <filter context="{'group_by' : 'fleet_type'}" name="groupby_fleet_type" string="Fleet Type"/>
+                </group>
+            </search>
+        </field>
+    </record-->
+    <record id="fleet_vehicle_form_inherit_strl" model="ir.ui.view">
+        <field name="name">fleet.vehicle.strl.form</field>
+        <field name="model">fleet.vehicle</field>
+        <field name="inherit_id" ref="fleet.fleet_vehicle_view_form"/>
+        <field name="priority">110</field>
+        <field name="arch" type="xml">
+            <xpath expr="//form/sheet" position="before">
+                <div class="alert alert-info" role="alert" style="margin-bottom:0px;" attrs="{'invisible': [('insurance_days_to_expire','!=', 0)]}">
+                    <h4><center>The date of the insurance policy is expired</center></h4>
+                </div>
+            </xpath>
+            <xpath expr="//label[@for='model_id']" name="model_id" position="before">
+                <label class="oe_edit_only" for="name"/>
+                <h1>
+                    <field name="name" placeholder="Expl. Bus 001"/>
+                </h1>
+            </xpath>
+            <field name="model_id" position="replace">
+                <field name="model_id" placeholder="Expl. Chamotor"/>
+            </field>
+            <field name="license_plate" position="replace">
+                 <field name="license_plate" class="oe_inline" placeholder="Expl. RT 4567Y"/>
+            </field>
+            <field name="driver_id" position="replace">
+                <field invisible="1" name="driver_id"/>
+                <field domain="[('agent_type', '=', 'driver')]" name="employee_id"/>
+            </field>
+            <field name="location" position="before">
+                <field name="bus_line_id"/>
+            </field>
+            <field name="car_value" position="after">
+                <field name="year_model"/>
+                <field name="active"/>
+            </field>
+            <xpath expr="//sheet/group[2]" position="replace">
+                <notebook>
+                    <page string="General Information">
+                        <group>
+                            <field name="registration"/>
+                            <field name="serial_number"/>
+                            <field name="supplier_unit"/>
+                            <field name="insurance_policy"/>
+                            <field name="insurance_policy_data"/>
+                            <field name="insurance_expiration"/>
+                            <!--field name="insurance_supplier_id"/-->
+                            <field name="insurance_days_to_expire"/>
+                        </group>
+                        <group string="Additional Properties">
+                            <field name="seats"/>
+                            <field name="doors"/>
+                            <field name="color"/>
+                        </group>
+                    </page>
+                    <page string="Engine Options">
+                        <group string="Engine Options">
+                            <field name="transmission"/>
+                            <field name="engine_id"/>
+                            <field name="fuel_type"/>
+                            <label for="co2"/>
+                            <div class="o_row">
+                                <field name="co2"/>
+                                <span>g/km</span>
+                            </div>
+                            <field name="horsepower"/>
+                            <field name="horsepower_tax"/>
+                            <label for="power"/>
+                            <div class="o_row">
+                                <field name="power"/>
+                                <span>kW</span>
+                            </div>
+                        </group>
+                    </page>
+                </notebook>
+                <group>
+                    <group string="Notes">
+                        <field name="notes" nolabel="1"/>
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+    <record model='ir.ui.view' id='fleet_vehicle_strl_kanban'>
+        <field name='name'>fleet_vehicle_strl_kanban</field>
+        <field name='model'>fleet.vehicle</field>
+        <field name="inherit_id" ref="fleet.fleet_vehicle_view_kanban"/>
+        <field name='arch' type='xml'>
+            <xpath expr="//strong" position="before">
+                <strong><field name="name"/></strong><br/>
+            </xpath>
+            <xpath expr="//ul" position="replace">
+              <ul>
+                  <li>
+                      <t t-if="record.employee_id.raw_value"><field name="employee_id"/></t>
+                  </li>
+                  <li>
+                      <t t-if="record.bus_line_id.raw_value"><field name="bus_line_id"/></t>
+                  </li>
+                  <li>
+                      <t t-if="record.location.raw_value"><field name="location"/></t>
+                  </li>
+              </ul>
+            </xpath>
+        </field>
+    </record>
+    <record id="fleet_vehicle_tree_strl" model="ir.ui.view">
+        <field name="name">fleet.vehicle.strl.tree</field>
+        <field name="inherit_id" ref="fleet.fleet_vehicle_view_tree"/>
+        <field name="model">fleet.vehicle</field>
+        <field name="arch" type="xml">
+            <tree position="replace">
+                <tree string="Vehicle">
+                    <field name="name"/>
+                    <field name="model_id"/>
+                    <field name="license_plate"/>
+                    <field invisible="1" name="driver_id"/>
+                    <field name="employee_id"/>
+                    <field name="bus_line_id"/>
+                    <field name="registration"/>
+                    <field name="state_id"/>
+                    <field name="odometer"/>
+                    <field name="odometer_unit"/>
+                </tree>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_fleet_vehicle_strl" model="ir.actions.act_window">
+        <field name="name">Véhicules (Bus)</field>
+        <field name="res_model">fleet.vehicle</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">kanban,tree,form</field>
+    </record>
+    <!--menuitem action="action_fleet_vehicle_strl" id="strl_fleet_vehicle_menu" name="Bus" parent="strl_bus_management" sequence="10"/-->
+
+    <record id='fleet_vehicle_odometer_view_form_strl' model='ir.ui.view'>
+            <field name="name">fleet.vehicle.odometer.strl.form</field>
+            <field name="model">fleet.vehicle.odometer</field>
+            <field name="arch" type="xml">
+                <form string="Odometer Logs">
+                    <sheet>
+                        <group>
+                            <field name="vehicle_id"/>
+                                <div>
+                                    <field name="value" class="oe_inline"/>
+                                    <field name="unit" class="oe_inline"/>
+                                </div>
+                            <field name="date" />
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id='fleet_vehicle_odometer_view_tree_strl' model='ir.ui.view'>
+            <field name="name">fleet.vehicle.odometer.strl.tree</field>
+            <field name="model">fleet.vehicle.odometer</field>
+            <field name="arch" type="xml">
+                <tree string="Odometer Logs" editable="top">
+                    <field name="date" />
+                    <field name="vehicle_id"/>
+                    <field name="value" />
+                    <field name="unit" />
+                </tree>
+            </field>
+        </record>
+
+        <record id='fleet_vehicle_odometer_view_search_strl' model='ir.ui.view'>
+            <field name="name">fleet.vehicle.odometer.strl.search</field>
+            <field name="model">fleet.vehicle.odometer</field>
+            <field name="arch" type="xml">
+                <search string="Vehicles odometers" >
+                    <field name="vehicle_id" />
+                    <field name="value"/>
+                    <field name="unit"/>
+                    <field name="date"/>
+                    <group expand="0" string="Group By">
+                        <filter name="groupby_vehicle" context="{'group_by' : 'vehicle_id'}" string="Vehicle"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="fleet_vehicle_odometer_view_graph_strl" model="ir.ui.view">
+           <field name="name">fleet.vehicle.odometer.strl.graph</field>
+           <field name="model">fleet.vehicle.odometer</field>
+           <field name="arch" type="xml">
+                <graph string="Odometer Values Per Vehicle">
+                    <field name="vehicle_id" type="row"/>
+                    <field name="value" type="measure"/>
+                </graph>
+            </field>
+        </record>
+
+        <record id='fleet_vehicle_odometer_action_strl' model='ir.actions.act_window'>
+            <field name="name">Vehicles Odometer</field>
+            <field name="res_model">fleet.vehicle.odometer</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,graph</field>
+            <field name="context">{"search_default_groupby_vehicle" : True}</field>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to create a new odometer log.
+              </p>
+              <p>
+                Here you can add various odometer entries for all vehicles.
+                You can also show odometer value for a particular vehicle using
+                the search field.
+              </p>
+            </field>
+        </record>
+
+        <!--menuitem action="fleet_vehicle_odometer_action_strl" parent="strl_bus_management" id="strl_fleet_vehicle_odometer_menu"/-->
+
+</odoo>

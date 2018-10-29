@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+      <menuitem id="strl_menu_main_transportation" name="Gestion des transports" sequence="200"/>
+      <menuitem id="strl_menu_main_transactions" name="Transactions" sequence="250"/>
+
+      <menuitem id="strl_bus_management" name="Gestion des bus" parent="strl_menu_main_transportation" action=""/>
+      <menuitem id="strl_transport_activities" name="Activités" parent="strl_menu_main_transportation" action=""/>
+      <menuitem id="strl_transport_activities_reporting" name="Rapports" parent="strl_menu_main_transportation" action=""/>
+      <menuitem id="strl_transport_configuration" name="Configuration" parent="strl_menu_main_transportation" action=""/>
+
+      <menuitem id="strl_transport_payment" name="Titres de transport" parent="strl_menu_main_transactions" action=""/>
+      <menuitem id="strl_transport_payement_reporting" name="Rapports" parent="strl_menu_main_transactions" action=""/>
+      <menuitem id="strl_transport_payement_configuration" name="Configuration" parent="strl_menu_main_transactions" action=""/>
+  </data>
+</odoo>

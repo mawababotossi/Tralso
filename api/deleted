@@ -1,0 +1,56 @@
+router.get('/cards/:code', (req, res, next) => {
+
+  var params = req.params || {}; console.log("\nCalled /cards/:code => Data" + JSON.stringify(req.params) );
+
+    // Queries DB to obtain individual card based on code
+    getCardByQRCode(params.code).then(function(result){
+      var card = result || {};
+      console.log("\nReturning result "+  JSON.stringify(card));
+      res.send(card);
+      next();
+    });
+});
+
+router.post('/cards/activate', (req, res, next) => {
+    var data = req.body || {}; console.log("\nCalled /cards/activate => Data "+ JSON.stringify(req.body) );
+
+    activateCardIfExists(_user_id, _card_id).then(function(result){
+      console.log("\nReturning result "+  result);
+      res.send(result);
+      next();
+    });
+});
+
+router.get('/customers/', (req, res, next) => {
+
+});
+
+router.get('/customer-by-id/:id', (req, res, next) => {
+
+});
+
+router.get('/customers/:phone/', (req, res, next) => {
+
+  var params = req.params || {}; console.log("\nCalled /customer/:phone => Data" + JSON.stringify(req.params) );
+
+  getUserByPhone(params.phone).then(function(result){
+    var users = result || [];
+    if(users[0]){
+      console.log("\nReturning user id "+  users[0]);
+      res.send(""+users[0]);
+      next();
+    }
+    else
+    return console.log("Error 0000X: User of phone "+ params.phone + " not foud \n");
+  }).catch(error => { console.log('caught', error.message); });
+
+});
+
+router.post('/customer/create/', (req, res, next) => {
+  var data = req.body || {};
+
+  createUser(data.name, data.phone).then(function(result){
+    res.send(result);
+    next();
+  });
+});
